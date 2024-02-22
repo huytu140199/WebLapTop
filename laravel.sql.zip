@@ -1,0 +1,483 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Nov 24, 2022 at 06:37 AM
+-- Server version: 10.4.19-MariaDB
+-- PHP Version: 7.3.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `laravel`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bill`
+--
+
+CREATE TABLE `bill` (
+  `id_bill` int(11) NOT NULL,
+  `id_order` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `total_price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bill_detail`
+--
+
+CREATE TABLE `bill_detail` (
+  `id_bill` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `brand`
+--
+
+CREATE TABLE `brand` (
+  `id_brand` int(11) NOT NULL,
+  `name_brand` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id_categories` int(11) NOT NULL,
+  `name_categories` varchar(255) NOT NULL,
+  `id_product` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id_categories`, `name_categories`, `id_product`) VALUES
+(1, 'ASUS', 0),
+(2, 'DELL', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comment`
+--
+
+CREATE TABLE `comment` (
+  `id_comment` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `content` varchar(1000) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_product` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `comment`
+--
+
+INSERT INTO `comment` (`id_comment`, `id_user`, `content`, `created_at`, `id_product`) VALUES
+(1, 1, 'sản phẩm chất lượng, tốt trong tầm giá', '2022-11-01 06:49:21', 104),
+(2, 15, 'máy tốt giá rẻ ', '2022-11-01 06:50:03', 102);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `import`
+--
+
+CREATE TABLE `import` (
+  `id_import` int(11) NOT NULL,
+  `id_categories` int(11) NOT NULL,
+  `id_supplier` int(11) NOT NULL,
+  `import_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `quantity` int(20) NOT NULL,
+  `price` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id_order` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `status` int(1) NOT NULL,
+  `total_price` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id_order`, `id_user`, `status`, `total_price`, `created_at`) VALUES
+(1, 1, 0, 10000000, '2022-11-09 15:11:11'),
+(2, 1, 1, 20000000, '2022-11-08 06:48:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_detail`
+--
+
+CREATE TABLE `order_detail` (
+  `id_order` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `order_detail`
+--
+
+INSERT INTO `order_detail` (`id_order`, `id_product`, `quantity`, `price`) VALUES
+(1, 102, 2, 0),
+(1, 103, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id_product` int(11) NOT NULL,
+  `id_category` int(11) NOT NULL,
+  `id_branch` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `image` char(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 0,
+  `description` text NOT NULL,
+  `CPU` varchar(255) NOT NULL,
+  `RAM` varchar(255) NOT NULL,
+  `capacity` varchar(255) NOT NULL,
+  `screen` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id_product`, `id_category`, `id_branch`, `name`, `image`, `price`, `quantity`, `description`, `CPU`, `RAM`, `capacity`, `screen`) VALUES
+(102, 2, 0, 'dell xps', '', 10000000, 200, 'hàng chính hãng', '', '', '', ''),
+(103, 1, 0, 'asus 1', '', 20000000, 111, '', '', '', '', ''),
+(104, 2, 0, 'Dell Gaming G15', '/images/dell-gaming.jpg', 15000000, 24, 'máy chính hãng', '', '', '', ''),
+(105, 1, 0, 'laptop asus bt01', 'C:\\xampp\\tmp\\php758F.tmp', 12000000, 0, 'đẹp', '', '', '', ''),
+(106, 1, 0, 'laptop asus bt01', 'C:\\xampp\\tmp\\phpD38.tmp', 12000000, 0, 'đẹp', '', '', '', ''),
+(107, 1, 0, 'laptop asus bt01', 'C:\\xampp\\tmp\\php247.tmp', 12000000, 0, 'đẹp', '', '', '', ''),
+(108, 2, 0, 'laptop dell 9658', 'C:\\xampp\\tmp\\php6613.tmp', 13000000, 0, 'giá tốt', '', '', '', ''),
+(109, 1, 0, 'laptop asus 1100', 'C:\\xampp\\tmp\\php82DF.tmp', 15000000, 0, 'máy đẹp', '', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier`
+--
+
+CREATE TABLE `supplier` (
+  `id_supplier` int(11) NOT NULL,
+  `name_supplier` varchar(255) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `address` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier_brand`
+--
+
+CREATE TABLE `supplier_brand` (
+  `id_supplier` int(11) NOT NULL,
+  `id_brand` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id_user` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` char(50) DEFAULT NULL,
+  `password` char(255) NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `phone` char(50) NOT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `image` char(255) DEFAULT NULL,
+  `level` int(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `address`, `phone`, `gender`, `image`, `level`, `created_at`) VALUES
+(1, 'điệp', 'tranhuynhdiep2k@gmail.com', '123', 'bắc giang', '0965600102', 'Nam', '', 0, '2022-11-07 04:24:15'),
+(15, 'long', NULL, '$2y$10$4oGt7P061kN2p4TKb35/6uVOkUkUdAefud1r7nnSN7CVJTgPlRp8S', NULL, '0965600103', NULL, NULL, 1, '2022-11-06 21:29:22'),
+(16, 'tú', NULL, '$2y$10$QbGmOSaZP.LbQVD1CnEgLOwWuaga71SzGOxkTzKqMnfNEauSeo0Y.', NULL, '0965060000', NULL, NULL, 1, '2022-11-06 23:51:25');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `bill`
+--
+ALTER TABLE `bill`
+  ADD PRIMARY KEY (`id_bill`),
+  ADD KEY `id_order` (`id_order`),
+  ADD KEY `bill_ibfk_2` (`id_user`);
+
+--
+-- Indexes for table `bill_detail`
+--
+ALTER TABLE `bill_detail`
+  ADD KEY `id_product` (`id_product`),
+  ADD KEY `id_bill` (`id_bill`);
+
+--
+-- Indexes for table `brand`
+--
+ALTER TABLE `brand`
+  ADD PRIMARY KEY (`id_brand`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id_categories`),
+  ADD KEY `id_product` (`id_product`);
+
+--
+-- Indexes for table `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`id_comment`),
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_product` (`id_product`);
+
+--
+-- Indexes for table `import`
+--
+ALTER TABLE `import`
+  ADD PRIMARY KEY (`id_import`),
+  ADD KEY `id_Product` (`id_categories`),
+  ADD KEY `import_ibfk_1` (`id_supplier`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id_order`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD KEY `id_order` (`id_order`),
+  ADD KEY `id_product` (`id_product`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id_product`),
+  ADD KEY `id_category` (`id_category`),
+  ADD KEY `id_branch` (`id_branch`);
+
+--
+-- Indexes for table `supplier`
+--
+ALTER TABLE `supplier`
+  ADD PRIMARY KEY (`id_supplier`);
+
+--
+-- Indexes for table `supplier_brand`
+--
+ALTER TABLE `supplier_brand`
+  ADD KEY `id_supplier` (`id_supplier`),
+  ADD KEY `id_brand` (`id_brand`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bill`
+--
+ALTER TABLE `bill`
+  MODIFY `id_bill` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `brand`
+--
+ALTER TABLE `brand`
+  MODIFY `id_brand` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id_categories` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+
+--
+-- AUTO_INCREMENT for table `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `id_supplier` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bill`
+--
+ALTER TABLE `bill`
+  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`),
+  ADD CONSTRAINT `bill_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+
+--
+-- Constraints for table `bill_detail`
+--
+ALTER TABLE `bill_detail`
+  ADD CONSTRAINT `bill_detail_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`),
+  ADD CONSTRAINT `bill_detail_ibfk_2` FOREIGN KEY (`id_bill`) REFERENCES `bill` (`id_bill`);
+
+--
+-- Constraints for table `categories`
+--
+ALTER TABLE `categories`
+  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
+  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`);
+
+--
+-- Constraints for table `import`
+--
+ALTER TABLE `import`
+  ADD CONSTRAINT `import_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `import_ibfk_2` FOREIGN KEY (`id_categories`) REFERENCES `categories` (`id_categories`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+
+--
+-- Constraints for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`),
+  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`);
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_categories`),
+  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`id_branch`) REFERENCES `brand` (`id_brand`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `supplier_brand`
+--
+ALTER TABLE `supplier_brand`
+  ADD CONSTRAINT `supplier_brand_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`),
+  ADD CONSTRAINT `supplier_brand_ibfk_2` FOREIGN KEY (`id_brand`) REFERENCES `brand` (`id_brand`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
